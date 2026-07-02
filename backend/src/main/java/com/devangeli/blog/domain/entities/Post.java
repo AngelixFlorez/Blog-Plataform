@@ -1,6 +1,6 @@
-package com.devtiro.blog.domain.entities;
+package com.devangeli.blog.domain.entities;
 
-import com.devtiro.blog.domain.PostStatus;
+import com.devangeli.blog.domain.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
