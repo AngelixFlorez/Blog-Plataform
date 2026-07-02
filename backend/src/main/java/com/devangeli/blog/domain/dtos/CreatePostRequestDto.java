@@ -1,6 +1,6 @@
-package com.devtiro.blog.domain.dtos;
+package com.devangeli.blog.domain.dtos;
 
-import com.devtiro.blog.domain.PostStatus;
+import com.devangelilili.blog.domain.PostStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

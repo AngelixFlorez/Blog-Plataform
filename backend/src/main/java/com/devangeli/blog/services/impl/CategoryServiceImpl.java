@@ -1,8 +1,8 @@
-package com.devtiro.blog.services.impl;
+package com.devangeli.blog.services.impl;
 
-import com.devtiro.blog.domain.entities.Category;
-import com.devtiro.blog.repositories.CategoryRepository;
-import com.devtiro.blog.services.CategoryService;
+import com.devangeli.blog.domain.entities.Category;
+import com.devangeli.blog.repositories.CategoryRepository;
+import com.devangeli.blog.services.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

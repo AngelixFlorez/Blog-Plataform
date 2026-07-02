@@ -1,4 +1,4 @@
-package com.devtiro.blog.domain.dtos;
+package com.devangeli.blog.domain.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

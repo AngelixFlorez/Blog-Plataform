@@ -1,4 +1,4 @@
-package com.devtiro.blog.domain.dtos;
+package com.devangeli.blog.domain.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

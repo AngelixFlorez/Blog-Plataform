@@ -1,16 +1,16 @@
-package com.devtiro.blog.services.impl;
+package com.devangeli.blog.services.impl;
 
-import com.devtiro.blog.domain.CreatePostRequest;
-import com.devtiro.blog.domain.PostStatus;
-import com.devtiro.blog.domain.UpdatePostRequest;
-import com.devtiro.blog.domain.entities.Category;
-import com.devtiro.blog.domain.entities.Post;
-import com.devtiro.blog.domain.entities.Tag;
-import com.devtiro.blog.domain.entities.User;
-import com.devtiro.blog.repositories.PostRepository;
-import com.devtiro.blog.services.CategoryService;
-import com.devtiro.blog.services.PostService;
-import com.devtiro.blog.services.TagService;
+import com.devangelilili.blog.domain.CreatePostRequest;
+import com.devangelilili.blog.domain.PostStatus;
+import com.devangelilili.blog.domain.UpdatePostRequest;
+import com.devangelilili.blog.domain.entities.Category;
+import com.devangelilili.blog.domain.entities.Post;
+import com.devangelilili.blog.domain.entities.Tag;
+import com.devangelilili.blog.domain.entities.User;
+import com.devangelilili.blog.repositories.PostRepository;
+import com.devangelilili.blog.services.CategoryService;
+import com.devangelilili.blog.services.PostService;
+import com.devangelilili.blog.services.TagService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,30 +41,27 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public List<Post> getAllPosts(UUID categoryId, UUID tagId) {
-        if(categoryId != null && tagId != null) {
+        if (categoryId != null && tagId != null) {
             Category category = categoryService.getCategoryById(categoryId);
             Tag tag = tagService.getTagById(tagId);
             return postRepository.findAllByStatusAndCategoryAndTagsContaining(
                     PostStatus.PUBLISHED,
                     category,
-                    tag
-            );
+                    tag);
         }
 
-        if(categoryId != null) {
+        if (categoryId != null) {
             Category category = categoryService.getCategoryById(categoryId);
             return postRepository.findAllByStatusAndCategory(
                     PostStatus.PUBLISHED,
-                    category
-            );
+                    category);
         }
 
-        if(tagId != null) {
+        if (tagId != null) {
             Tag tag = tagService.getTagById(tagId);
             return postRepository.findAllByStatusAndTagsContaining(
                     PostStatus.PUBLISHED,
-                    tag
-            );
+                    tag);
         }
 
         return postRepository.findAllByStatus(PostStatus.PUBLISHED);
@@ -108,14 +105,14 @@ public class PostServiceImpl implements PostService {
         existingPost.setReadingTime(calculateReadingTime(postContent));
 
         UUID updatePostRequestCategoryId = updatePostRequest.getCategoryId();
-        if(!existingPost.getCategory().getId().equals(updatePostRequestCategoryId)) {
+        if (!existingPost.getCategory().getId().equals(updatePostRequestCategoryId)) {
             Category newCategory = categoryService.getCategoryById(updatePostRequestCategoryId);
             existingPost.setCategory(newCategory);
         }
 
         Set<UUID> existingTagIds = existingPost.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
         Set<UUID> updatePostRequestTagIds = updatePostRequest.getTagIds();
-        if(!existingTagIds.equals(updatePostRequestTagIds)) {
+        if (!existingTagIds.equals(updatePostRequestTagIds)) {
             List<Tag> newTags = tagService.getTagByIds(updatePostRequestTagIds);
             existingPost.setTags(new HashSet<>(newTags));
         }
@@ -130,7 +127,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private Integer calculateReadingTime(String content) {
-        if(content == null || content.isEmpty()) {
+        if (content == null || content.isEmpty()) {
             return 0;
         }
 

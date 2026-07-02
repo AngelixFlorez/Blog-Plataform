@@ -1,6 +1,6 @@
-package com.devtiro.blog.domain.dtos;
+package com.devangeli.blog.domain.dtos;
 
-import com.devtiro.blog.domain.PostStatus;
+import com.devangelilili.blog.domain.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

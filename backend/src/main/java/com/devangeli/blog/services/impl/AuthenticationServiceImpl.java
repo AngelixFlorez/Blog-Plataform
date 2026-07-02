@@ -1,6 +1,6 @@
-package com.devtiro.blog.services.impl;
+package com.devangeli.blog.services.impl;
 
-import com.devtiro.blog.services.AuthenticationService;
+import com.devangeli.blog.services.AuthenticationService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

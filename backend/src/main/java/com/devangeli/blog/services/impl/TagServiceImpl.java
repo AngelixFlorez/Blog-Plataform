@@ -1,8 +1,8 @@
-package com.devtiro.blog.services.impl;
+package com.devangeli.blog.services.impl;
 
-import com.devtiro.blog.domain.entities.Tag;
-import com.devtiro.blog.repositories.TagRepository;
-import com.devtiro.blog.services.TagService;
+import com.devangeli.blog.domain.entities.Tag;
+import com.devangeli.blog.repositories.TagRepository;
+import com.devangeli.blog.services.TagService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
