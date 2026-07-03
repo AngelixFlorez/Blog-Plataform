@@ -24,8 +24,9 @@ services:
           name: blog-db
           property: user
 
-  - type: static
+  - type: web
     name: blog-frontend
+    env: static
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
     envVars:
