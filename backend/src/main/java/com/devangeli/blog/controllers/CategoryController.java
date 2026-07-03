@@ -31,6 +31,12 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<CategoryDto> getCategory(@PathVariable UUID id) {
+        Category category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(categoryMapper.toDto(category));
+    }
+
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(
             @Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
@@ -39,6 +45,14 @@ public class CategoryController {
         return new ResponseEntity<>(
                 categoryMapper.toDto(savedCategory),
                 HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(
+            @PathVariable UUID id,
+            @Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
+        Category updatedCategory = categoryService.updateCategory(id, createCategoryRequest.getName());
+        return ResponseEntity.ok(categoryMapper.toDto(updatedCategory));
     }
 
     @DeleteMapping(path = "/{id}")

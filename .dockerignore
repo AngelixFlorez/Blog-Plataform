@@ -1,0 +1,11 @@
+**/node_modules
+**/target
+**/.git
+**/.gitignore
+**/dist
+**/.next
+**/__pycache__
+**/.env.local
+**/node_modules/
+**/target/
+**/.git/

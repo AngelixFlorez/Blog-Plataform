@@ -21,6 +21,7 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import { Plus, Trash2, X } from "lucide-react";
+import toast from "react-hot-toast";
 import { apiService, Tag } from "../services/apiService";
 
 interface TagsPageProps {
@@ -61,6 +62,7 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
     try {
       setIsSubmitting(true);
       await apiService.createTags(newTags);
+      toast.success("Tags created successfully");
       await fetchTags();
       handleModalClose();
     } catch (err) {
@@ -80,6 +82,7 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
     try {
       setLoading(true);
       await apiService.deleteTag(tag.id);
+      toast.success("Tag deleted successfully");
       await fetchTags();
     } catch (err) {
       setError("Failed to delete tag. Please try again.");

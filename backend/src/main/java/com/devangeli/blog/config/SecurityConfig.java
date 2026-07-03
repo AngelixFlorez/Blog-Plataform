@@ -5,8 +5,10 @@ import com.devangeli.blog.repositories.UserRepository;
 import com.devangeli.blog.security.BlogUserDetailsService;
 import com.devangeli.blog.security.JwtAuthenticationFilter;
 import com.devangeli.blog.services.AuthenticationService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -17,6 +19,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class SecurityConfig {
@@ -28,19 +32,23 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(userRepository);
+        return new BlogUserDetailsService(userRepository);
+    }
 
-        String email = "user@test.com";
-        userRepository.findByEmail(email).orElseGet(() -> {
-            User newUser = User.builder()
-                    .name("Test User")
-                    .email(email)
-                    .password(passwordEncoder().encode("password"))
-                    .build();
-            return userRepository.save(newUser);
-        });
-
-        return blogUserDetailsService;
+    @Bean
+    @Profile("dev")
+    public CommandLineRunner seedTestUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        return args -> {
+            String email = "user@test.com";
+            userRepository.findByEmail(email).orElseGet(() -> {
+                User newUser = User.builder()
+                        .name("Test User")
+                        .email(email)
+                        .password(passwordEncoder.encode("password"))
+                        .build();
+                return userRepository.save(newUser);
+            });
+        };
     }
 
     @Bean
@@ -50,6 +58,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/drafts").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
@@ -71,5 +80,19 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 }

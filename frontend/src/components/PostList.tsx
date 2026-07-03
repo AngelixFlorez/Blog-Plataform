@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, useNavigate, useNavigation } from 'react-router-dom';
-import { Card, CardBody, CardFooter, CardHeader, Chip, Pagination, Select, SelectItem } from '@nextui-org/react';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardBody, CardFooter, CardHeader, Chip } from '@nextui-org/react';
 import { Post } from '../services/apiService';
 import { Calendar, Clock, Tag } from 'lucide-react';
-import DOMPurify from 'dompurify';
+import { createExcerpt } from '../utils/sanitize';
 
 interface PostListProps {
   posts: Post[] | null;
@@ -42,37 +42,7 @@ const PostList: React.FC<PostListProps> = ({
     });
   };
 
-  const createSanitizedHTML = (content: string) => {
-    return {
-      __html: DOMPurify.sanitize(content, {
-        ALLOWED_TAGS: ['p', 'strong', 'em', 'br'],
-        ALLOWED_ATTR: []
-      })
-    };
-  };
 
-  const createExcerpt = (content: string) => {
-    // First sanitize the HTML
-    const sanitizedContent = DOMPurify.sanitize(content, {
-      ALLOWED_TAGS: ['p', 'strong', 'em', 'br'],
-      ALLOWED_ATTR: []
-    });
-    
-    // Create a temporary div to parse the HTML
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = sanitizedContent;
-    
-    // Get the text content and limit it
-    let textContent = tempDiv.textContent || tempDiv.innerText || '';
-    textContent = textContent.trim();
-    
-    // Limit to roughly 200 characters, ending at the last complete word
-    if (textContent.length > 200) {
-      textContent = textContent.substring(0, 200).split(' ').slice(0, -1).join(' ') + '...';
-    }
-    
-    return textContent;
-  };
 
   if (error) {
     return (

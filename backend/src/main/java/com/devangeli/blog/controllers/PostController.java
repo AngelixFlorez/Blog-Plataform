@@ -12,6 +12,10 @@ import com.devangeli.blog.services.PostService;
 import com.devangeli.blog.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +63,12 @@ public class PostController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<PostDto> updatePost(
             @PathVariable UUID id,
-            @Valid @RequestBody UpdatePostRequestDto updatePostRequestDto) {
+            @Valid @RequestBody UpdatePostRequestDto updatePostRequestDto,
+            @RequestAttribute UUID userId) {
+        Post existingPost = postService.getPost(id);
+        if (!existingPost.getAuthor().getId().equals(userId)) {
+            throw new IllegalStateException("You can only edit your own posts");
+        }
         UpdatePostRequest updatePostRequest = postMapper.toUpdatePostRequest(updatePostRequestDto);
         Post updatedPost = postService.updatePost(id, updatePostRequest);
         PostDto updatedPostDto = postMapper.toDto(updatedPost);
@@ -74,8 +83,22 @@ public class PostController {
         return ResponseEntity.ok(postDto);
     }
 
+    @PatchMapping(path = "/{id}/publish")
+    public ResponseEntity<PostDto> publishPost(@PathVariable UUID id, @RequestAttribute UUID userId) {
+        Post existingPost = postService.getPost(id);
+        if (!existingPost.getAuthor().getId().equals(userId)) {
+            throw new IllegalStateException("You can only publish your own posts");
+        }
+        Post updatedPost = postService.publishPost(id);
+        return ResponseEntity.ok(postMapper.toDto(updatedPost));
+    }
+
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable UUID id) {
+    public ResponseEntity<Void> deletePost(@PathVariable UUID id, @RequestAttribute UUID userId) {
+        Post existingPost = postService.getPost(id);
+        if (!existingPost.getAuthor().getId().equals(userId)) {
+            throw new IllegalStateException("You can only delete your own posts");
+        }
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
     }

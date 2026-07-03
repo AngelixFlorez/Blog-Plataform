@@ -13,6 +13,9 @@ import com.devangeli.blog.services.PostService;
 import com.devangeli.blog.services.TagService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
@@ -34,6 +38,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPost(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Post ID must not be null");
+        }
         return postRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Post does not exist with ID " + id));
     }
@@ -68,6 +75,35 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<Post> getAllPostsPaged(UUID categoryId, UUID tagId, String search, Pageable pageable) {
+        if (search != null && !search.isBlank()) {
+            return postRepository.searchByKeyword(PostStatus.PUBLISHED, search, pageable);
+        }
+
+        if (categoryId != null && tagId != null) {
+            Category category = categoryService.getCategoryById(categoryId);
+            Tag tag = tagService.getTagById(tagId);
+            return postRepository.findAllByStatusAndCategoryAndTagsContaining(
+                    PostStatus.PUBLISHED, category, tag, pageable);
+        }
+
+        if (categoryId != null) {
+            Category category = categoryService.getCategoryById(categoryId);
+            return postRepository.findAllByStatusAndCategory(
+                    PostStatus.PUBLISHED, category, pageable);
+        }
+
+        if (tagId != null) {
+            Tag tag = tagService.getTagById(tagId);
+            return postRepository.findAllByStatusAndTagsContaining(
+                    PostStatus.PUBLISHED, tag, pageable);
+        }
+
+        return postRepository.findAllByStatus(PostStatus.PUBLISHED, pageable);
+    }
+
+    @Override
     public List<Post> getDraftPosts(User user) {
         return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
     }
@@ -89,7 +125,9 @@ public class PostServiceImpl implements PostService {
         List<Tag> tags = tagService.getTagByIds(tagIds);
         newPost.setTags(new HashSet<>(tags));
 
-        return postRepository.save(newPost);
+        Post saved = postRepository.save(newPost);
+        log.info("Post created: {} by {}", saved.getTitle(), user.getEmail());
+        return saved;
     }
 
     @Override
@@ -117,13 +155,26 @@ public class PostServiceImpl implements PostService {
             existingPost.setTags(new HashSet<>(newTags));
         }
 
-        return postRepository.save(existingPost);
+        Post saved = postRepository.save(existingPost);
+        log.info("Post updated: {}", id);
+        return saved;
+    }
+
+    @Override
+    @Transactional
+    public Post publishPost(UUID id) {
+        Post post = getPost(id);
+        post.setStatus(PostStatus.PUBLISHED);
+        Post saved = postRepository.save(post);
+        log.info("Post published: {}", id);
+        return saved;
     }
 
     @Override
     public void deletePost(UUID id) {
         Post post = getPost(id);
         postRepository.delete(post);
+        log.info("Post deleted: {}", id);
     }
 
     private Integer calculateReadingTime(String content) {

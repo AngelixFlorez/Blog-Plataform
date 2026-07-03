@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import DOMPurify from 'dompurify';
+import { createSanitizedHTML } from '../utils/sanitize';
 import {
   Card,
   CardHeader,
@@ -11,7 +11,7 @@ import {
   Divider,
   Avatar,
 } from '@nextui-org/react';
-import { 
+import {
   Calendar,
   Clock,
   Tag,
@@ -20,6 +20,7 @@ import {
   ArrowLeft,
   Share
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { apiService, Post } from '../services/apiService';
 
 interface PostPageProps {
@@ -64,6 +65,7 @@ const PostPage: React.FC<PostPageProps> = ({
     try {
       setIsDeleting(true);
       await apiService.deletePost(post.id);
+      toast.success('Post deleted successfully');
       navigate('/');
     } catch (err) {
       setError('Failed to delete the post. Please try again later.');
@@ -90,15 +92,6 @@ const PostPage: React.FC<PostPageProps> = ({
       month: 'long',
       day: 'numeric',
     });
-  };
-
-  const createSanitizedHTML = (content: string) => {
-    return {
-      __html: DOMPurify.sanitize(content, {
-        ALLOWED_TAGS: ['p', 'strong', 'em', 'br'],
-        ALLOWED_ATTR: []
-      })
-    };
   };
 
   if (loading) {

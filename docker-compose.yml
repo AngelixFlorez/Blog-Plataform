@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changemeinprod!}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JWT_SECRET: ${JWT_SECRET:-your-256-bit-secret-key-here-make-it-at-least-32-bytes-long}
+      DB_PASSWORD: ${DB_PASSWORD:-changemeinprod!}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  adminer:
+    image: adminer
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

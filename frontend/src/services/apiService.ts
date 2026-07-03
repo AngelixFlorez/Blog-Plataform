@@ -11,6 +11,12 @@ export interface AuthResponse {
   expiresIn: number;
 }
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export interface Category {
   id: string;
   name: string;
@@ -72,7 +78,7 @@ class ApiService {
 
   private constructor() {
     this.api = axios.create({
-      baseURL: '/api/v1',
+      baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
       headers: {
         'Content-Type': 'application/json'
       }
@@ -133,6 +139,25 @@ class ApiService {
     localStorage.removeItem('token');
   }
 
+  public setAuthToken(authToken: string | null): void {
+    if (authToken) {
+      this.api.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+    } else {
+      delete this.api.defaults.headers.common['Authorization'];
+    }
+  }
+
+  public async getUserProfile(authToken?: string): Promise<UserProfile> {
+    const response: AxiosResponse<UserProfile> = await this.api.get('/auth/profile');
+    return response.data;
+  }
+
+  public async register(name: string, email: string, password: string): Promise<AuthResponse> {
+    const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/register', { name, email, password });
+    localStorage.setItem('token', response.data.token);
+    return response.data;
+  }
+
   // Posts endpoints
   public async getPosts(params: {
     categoryId?: string;
@@ -182,7 +207,7 @@ class ApiService {
   }
 
   public async updateCategory(id: string, name: string): Promise<Category> {
-    const response: AxiosResponse<Category> = await this.api.put(`/categories/${id}`, { id, name });
+    const response: AxiosResponse<Category> = await this.api.put(`/categories/${id}`, { name });
     return response.data;
   }
 

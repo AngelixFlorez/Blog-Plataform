@@ -7,6 +7,7 @@ import {
   Button,
 } from '@nextui-org/react';
 import { ArrowLeft } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { apiService, Post, Category, Tag, PostStatus } from '../services/apiService';
 import PostForm from '../components/PostForm';
 
@@ -64,8 +65,10 @@ const EditPostPage: React.FC = () => {
           ...postData,
           id
         });
+        toast.success('Post updated successfully');
       } else {
         await apiService.createPost(postData);
+        toast.success('Post created successfully');
       }
 
       navigate('/');

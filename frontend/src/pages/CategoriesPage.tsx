@@ -20,6 +20,7 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import { Plus, Edit2, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
 import { apiService, Category } from "../services/apiService";
 
 interface CategoriesPageProps {
@@ -64,8 +65,10 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
           editingCategory.id,
           newCategoryName.trim()
         );
+        toast.success("Category updated successfully");
       } else {
         await apiService.createCategory(newCategoryName.trim());
+        toast.success("Category created successfully");
       }
       await fetchCategories();
       handleModalClose();
@@ -92,6 +95,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
     try {
       setLoading(true);
       await apiService.deleteCategory(category.id);
+      toast.success("Category deleted successfully");
       await fetchCategories();
     } catch (err) {
       setError("Failed to delete category. Please try again.");

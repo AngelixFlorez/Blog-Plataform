@@ -4,16 +4,17 @@ import com.devangeli.blog.domain.entities.Category;
 import com.devangeli.blog.repositories.CategoryRepository;
 import com.devangeli.blog.services.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -30,24 +31,43 @@ public class CategoryServiceImpl implements CategoryService {
         if(categoryRepository.existsByNameIgnoreCase(categoryName)) {
             throw new IllegalArgumentException("Category already exists with name: " + categoryName);
         }
-        return categoryRepository.save(category);
+        Category saved = categoryRepository.save(category);
+        log.info("Category created: {}", categoryName);
+        return saved;
     }
 
     @Override
-    public void deleteCategory(UUID id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if(category.isPresent()) {
-            if(!category.get().getPosts().isEmpty()) {
-                throw new IllegalStateException("Category has posts associated with it");
-            }
-            categoryRepository.deleteById(id);
+    @Transactional
+    public Category updateCategory(UUID id, String name) {
+        Category category = getCategoryById(id);
+        if (!category.getName().equalsIgnoreCase(name) && categoryRepository.existsByNameIgnoreCase(name)) {
+            throw new IllegalArgumentException("Category already exists with name: " + name);
         }
+        category.setName(name);
+        Category saved = categoryRepository.save(category);
+        log.info("Category updated: {} -> {}", id, name);
+        return saved;
+    }
+
+    @Override
+    @Transactional
+    public void deleteCategory(UUID id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id " + id));
+        if(!category.getPosts().isEmpty()) {
+            throw new IllegalStateException("Category has posts associated with it");
+        }
+        categoryRepository.deleteById(id);
+        log.info("Category deleted: {}", id);
     }
 
     @Override
     public Category getCategoryById(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Category ID must not be null");
+        }
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found with id" + id));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id " + id));
     }
 
 }

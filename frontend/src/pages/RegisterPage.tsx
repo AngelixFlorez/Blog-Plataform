@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../components/AuthContext';
 import { Card, CardBody, CardHeader, Input, Button, Divider } from '@nextui-org/react';
+import toast from 'react-hot-toast';
+import { apiService } from '../services/apiService';
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,10 +18,12 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      const response = await apiService.register(name, email, password);
+      localStorage.setItem('token', response.token);
+      toast.success('Account created successfully');
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Failed to login. Please try again.');
+      setError(err.response?.data?.message || err.message || 'Failed to register. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -30,11 +33,19 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="max-w-md w-full">
         <CardHeader className="flex flex-col items-center gap-2 pt-8">
-          <h2 className="text-2xl font-bold">Welcome Back</h2>
-          <p className="text-default-500 text-sm">Sign in to your account</p>
+          <h2 className="text-2xl font-bold">Create Account</h2>
+          <p className="text-default-500 text-sm">Sign up for a new account</p>
         </CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Name"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              isRequired
+              isDisabled={isLoading}
+            />
             <Input
               label="Email"
               type="email"
@@ -48,12 +59,12 @@ const LoginPage = () => {
             <Input
               label="Password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="At least 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               isRequired
               isDisabled={isLoading}
-              autoComplete="current-password"
+              autoComplete="new-password"
             />
 
             {error && (
@@ -69,15 +80,15 @@ const LoginPage = () => {
               className="w-full"
               size="lg"
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? 'Creating account...' : 'Create Account'}
             </Button>
 
             <Divider />
 
             <p className="text-center text-sm text-default-500">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-primary font-medium hover:underline">
-                Register
+              Already have an account?{' '}
+              <Link to="/login" className="text-primary font-medium hover:underline">
+                Sign in
               </Link>
             </p>
           </form>
@@ -87,4 +98,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
