@@ -1,8 +1,6 @@
 services:
   - type: web
     name: blog-backend
-    env: java
-    region: oregon
     buildCommand: cd backend && ./mvnw clean package -DskipTests
     startCommand: java -jar backend/target/blog-0.0.1-SNAPSHOT.jar
     healthCheckPath: /api/v1/posts
@@ -26,10 +24,8 @@ services:
           name: blog-db
           property: user
 
-  - type: web
+  - type: static
     name: blog-frontend
-    env: static
-    region: oregon
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
     envVars:
@@ -38,6 +34,5 @@ services:
 
 databases:
   - name: blog-db
-    region: oregon
-    databaseName: blog
+    engine: postgres
     plan: free
