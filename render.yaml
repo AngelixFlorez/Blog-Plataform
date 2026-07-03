@@ -2,8 +2,7 @@ services:
   - type: web
     name: blog-backend
     runtime: docker
-    buildCommand: cd backend && ./mvnw clean package -DskipTests
-    startCommand: java -jar backend/target/blog-0.0.1-SNAPSHOT.jar
+    dockerfilePath: backend/Dockerfile
     healthCheckPath: /api/v1/posts
     envVars:
       - key: SPRING_PROFILES_ACTIVE
