@@ -5,8 +5,9 @@ import {
   CardBody,
   CardHeader,
   Button,
+  Spinner,
 } from '@nextui-org/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Edit3 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { apiService, Post, Category, Tag, PostStatus } from '../services/apiService';
 import PostForm from '../components/PostForm';
@@ -27,7 +28,7 @@ const EditPostPage: React.FC = () => {
         setLoading(true);
         const [categoriesResponse, tagsResponse] = await Promise.all([
           apiService.getCategories(),
-          apiService.getTags()
+          apiService.getTags(),
         ]);
 
         setCategories(categoriesResponse);
@@ -61,10 +62,7 @@ const EditPostPage: React.FC = () => {
       setError(null);
 
       if (id) {
-        await apiService.updatePost(id, {
-          ...postData,
-          id
-        });
+        await apiService.updatePost(id, { ...postData, id });
         toast.success('Post updated successfully');
       } else {
         await apiService.createPost(postData);
@@ -88,42 +86,48 @@ const EditPostPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4">
-        <Card className="w-full animate-pulse">
-          <CardBody>
-            <div className="h-8 bg-default-200 rounded w-3/4 mb-4"></div>
-            <div className="space-y-3">
-              <div className="h-4 bg-default-200 rounded w-full"></div>
-              <div className="h-4 bg-default-200 rounded w-full"></div>
-              <div className="h-4 bg-default-200 rounded w-2/3"></div>
-            </div>
-          </CardBody>
-        </Card>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <div className="space-y-6 animate-pulse">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-lg w-1/3" />
+          <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
-      <Card className="w-full">
-        <CardHeader className="flex justify-between items-center">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+      <Card className="border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+        <CardHeader className="flex justify-between items-center p-6 pb-0">
           <div className="flex items-center gap-4">
             <Button
               variant="flat"
               startContent={<ArrowLeft size={16} />}
               onClick={handleCancel}
+              className="font-medium"
+              size="sm"
             >
               Back
             </Button>
-            <h1 className="text-2xl font-bold">
-              {id ? 'Edit Post' : 'Create New Post'}
-            </h1>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center">
+                <Edit3 size={20} className="text-primary" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">
+                  {id ? 'Edit Post' : 'Create New Post'}
+                </h1>
+                <p className="text-sm text-gray-500">
+                  {id ? 'Make changes to your post' : 'Write something amazing'}
+                </p>
+              </div>
+            </div>
           </div>
         </CardHeader>
 
-        <CardBody>
+        <CardBody className="p-6">
           {error && (
-            <div className="mb-4 p-4 text-red-500 bg-red-50 rounded-lg">
+            <div className="mb-6 p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 text-danger text-sm rounded-xl">
               {error}
             </div>
           )}

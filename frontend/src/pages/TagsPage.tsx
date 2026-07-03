@@ -19,8 +19,9 @@ import {
   ModalFooter,
   Chip,
   Tooltip,
+  Spinner,
 } from "@nextui-org/react";
-import { Plus, Trash2, X } from "lucide-react";
+import { Plus, Trash2, X, Hash } from "lucide-react";
 import toast from "react-hot-toast";
 import { apiService, Tag } from "../services/apiService";
 
@@ -55,9 +56,7 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
   };
 
   const handleAddTags = async () => {
-    if (newTags.length === 0) {
-      return;
-    }
+    if (newTags.length === 0) return;
 
     try {
       setIsSubmitting(true);
@@ -73,14 +72,9 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
   };
 
   const handleDelete = async (tag: Tag) => {
-    if (
-      !window.confirm(`Are you sure you want to delete the tag "${tag.name}"?`)
-    ) {
-      return;
-    }
+    if (!window.confirm(`Delete "${tag.name}"?`)) return;
 
     try {
-      setLoading(true);
       await apiService.deleteTag(tag.id);
       toast.success("Tag deleted successfully");
       await fetchTags();
@@ -115,24 +109,36 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
-      <Card>
-        <CardHeader className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Tags</h1>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+      <Card className="border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+        <CardHeader className="flex justify-between items-center p-6 pb-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center">
+              <Hash size={20} className="text-primary" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold">Tags</h1>
+              <p className="text-sm text-gray-500">
+                {tags.length} tag{tags.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+          </div>
           {isAuthenticated && (
             <Button
               color="primary"
+              variant="shadow"
               startContent={<Plus size={16} />}
               onClick={onOpen}
+              className="font-medium shadow-lg shadow-primary/20"
             >
               Add Tags
             </Button>
           )}
         </CardHeader>
 
-        <CardBody>
+        <CardBody className="p-6">
           {error && (
-            <div className="mb-4 p-4 text-red-500 bg-red-50 rounded-lg">
+            <div className="mb-4 p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 text-danger text-sm rounded-xl">
               {error}
             </div>
           )}
@@ -142,27 +148,35 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
             isHeaderSticky
             classNames={{
               wrapper: "max-h-[600px]",
+              th: "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 font-semibold text-xs uppercase tracking-wider",
+              td: "py-4",
             }}
           >
             <TableHeader>
               <TableColumn>NAME</TableColumn>
-              <TableColumn>POST COUNT</TableColumn>
+              <TableColumn>POSTS</TableColumn>
               <TableColumn>ACTIONS</TableColumn>
             </TableHeader>
             <TableBody
               isLoading={loading}
-              loadingContent={<div>Loading tags...</div>}
+              loadingContent={<Spinner label="Loading..." />}
             >
               {tags.map((tag) => (
-                <TableRow key={tag.id}>
-                  <TableCell>{tag.name}</TableCell>
-                  <TableCell>{tag.postCount || 0}</TableCell>
+                <TableRow key={tag.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                  <TableCell>
+                    <span className="font-medium">{tag.name}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Chip size="sm" variant="flat" className="font-medium">
+                      {tag.postCount || 0} post{(tag.postCount || 0) !== 1 ? "s" : ""}
+                    </Chip>
+                  </TableCell>
                   <TableCell>
                     {isAuthenticated ? (
                       <Tooltip
                         content={
                           tag.postCount
-                            ? "Cannot delete tag with existing posts"
+                            ? "Cannot delete tag with posts"
                             : "Delete tag"
                         }
                       >
@@ -172,15 +186,14 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
                           color="danger"
                           size="sm"
                           onClick={() => handleDelete(tag)}
-                          isDisabled={
-                            tag?.postCount ? tag.postCount > 0 : false
-                          }
+                          isDisabled={tag?.postCount ? tag.postCount > 0 : false}
+                          className="hover-lift"
                         >
                           <Trash2 size={16} />
                         </Button>
                       </Tooltip>
                     ) : (
-                      <span>-</span>
+                      <span className="text-sm text-gray-400">-</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -190,43 +203,60 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
         </CardBody>
       </Card>
 
-      <Modal isOpen={isOpen} onClose={handleModalClose}>
-        <ModalContent>
-          <ModalHeader>Add Tags</ModalHeader>
+      {/* Modal */}
+      <Modal isOpen={isOpen} onClose={handleModalClose} placement="center">
+        <ModalContent className="border border-gray-200/50 dark:border-gray-700/50">
+          <ModalHeader className="flex flex-col gap-1">
+            <h2 className="text-xl font-bold">Add Tags</h2>
+            <p className="text-sm text-gray-500 font-normal">
+              Type and press Enter or comma to add tags
+            </p>
+          </ModalHeader>
           <ModalBody>
             <div className="space-y-4">
               <Input
-                label="Enter tags"
-                placeholder="Type and press Enter or comma to add tags"
+                label="Tags"
+                placeholder="e.g. javascript, react, tutorial"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleTagInputKeyDown}
+                variant="bordered"
+                autoFocus
+                classNames={{
+                  label: "text-sm font-medium",
+                }}
               />
-              <div className="flex flex-wrap gap-2">
-                {newTags.map((tag) => (
-                  <Chip
-                    key={tag}
-                    onClose={() => handleRemoveNewTag(tag)}
-                    variant="flat"
-                    endContent={<X size={14} />}
-                  >
-                    {tag}
-                  </Chip>
-                ))}
-              </div>
+              {newTags.length > 0 && (
+                <div className="flex flex-wrap gap-2 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                  {newTags.map((tag) => (
+                    <Chip
+                      key={tag}
+                      onClose={() => handleRemoveNewTag(tag)}
+                      variant="flat"
+                      color="primary"
+                      endContent={<X size={14} />}
+                      className="font-medium"
+                    >
+                      {tag}
+                    </Chip>
+                  ))}
+                </div>
+              )}
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="flat" onClick={handleModalClose}>
+            <Button variant="flat" onClick={handleModalClose} className="font-medium">
               Cancel
             </Button>
             <Button
               color="primary"
+              variant="shadow"
               onClick={handleAddTags}
               isLoading={isSubmitting}
               isDisabled={newTags.length === 0}
+              className="font-medium shadow-lg shadow-primary/20"
             >
-              Add Tags
+              Add {newTags.length > 0 ? `(${newTags.length})` : ""} Tags
             </Button>
           </ModalFooter>
         </ModalContent>

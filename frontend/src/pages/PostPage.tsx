@@ -10,6 +10,7 @@ import {
   Button,
   Divider,
   Avatar,
+  Spinner,
 } from '@nextui-org/react';
 import {
   Calendar,
@@ -18,7 +19,10 @@ import {
   Edit,
   Trash,
   ArrowLeft,
-  Share
+  Share,
+  Heart,
+  MessageCircle,
+  Bookmark,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { apiService, Post } from '../services/apiService';
@@ -28,10 +32,7 @@ interface PostPageProps {
   currentUserId?: string;
 }
 
-const PostPage: React.FC<PostPageProps> = ({ 
-  isAuthenticated,
-  currentUserId
-}) => {
+const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | undefined>(undefined);
@@ -81,8 +82,8 @@ const PostPage: React.FC<PostPageProps> = ({
         url: window.location.href,
       });
     } catch (err) {
-      // Fallback to copying URL
       navigator.clipboard.writeText(window.location.href);
+      toast.success('Link copied to clipboard');
     }
   };
 
@@ -96,34 +97,38 @@ const PostPage: React.FC<PostPageProps> = ({
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4">
-        <Card className="w-full animate-pulse">
-          <CardBody>
-            <div className="h-8 bg-default-200 rounded w-3/4 mb-4"></div>
-            <div className="space-y-3">
-              <div className="h-4 bg-default-200 rounded w-full"></div>
-              <div className="h-4 bg-default-200 rounded w-full"></div>
-              <div className="h-4 bg-default-200 rounded w-2/3"></div>
-            </div>
-          </CardBody>
-        </Card>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+        <div className="space-y-6">
+          <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg w-3/4 animate-pulse" />
+          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-lg w-1/3 animate-pulse" />
+          <div className="space-y-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" style={{ width: `${80 - i * 10}%` }} />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error || !post) {
     return (
-      <div className="max-w-4xl mx-auto px-4">
-        <Card>
-          <CardBody>
-            <p className="text-danger">{error || 'Post not found'}</p>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+        <Card className="border border-gray-200/50 dark:border-gray-700/50">
+          <CardBody className="p-12 text-center">
+            <div className="w-16 h-16 rounded-full bg-danger-50 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl text-danger">!</span>
+            </div>
+            <p className="text-danger text-lg font-medium mb-4">
+              {error || 'Post not found'}
+            </p>
             <Button
               as={Link}
               to="/"
               color="primary"
               variant="flat"
               startContent={<ArrowLeft size={16} />}
-              className="mt-4"
+              className="font-medium"
             >
               Back to Home
             </Button>
@@ -134,20 +139,63 @@ const PostPage: React.FC<PostPageProps> = ({
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
-      <Card className="w-full">
-        <CardHeader className="flex flex-col items-start gap-3">
-          <div className="flex justify-between w-full">
-            <Button
-              as={Link}
-              to="/"
-              variant="flat"
-              startContent={<ArrowLeft size={16} />}
-              size="sm"
-            >
-              Back to Posts
-            </Button>
-            <div className="flex gap-2">
+    <article className="max-w-4xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+      {/* Back button */}
+      <Button
+        as={Link}
+        to="/"
+        variant="light"
+        startContent={<ArrowLeft size={16} />}
+        className="mb-6 font-medium hover-lift"
+        size="sm"
+      >
+        Back to Posts
+      </Button>
+
+      {/* Main content card */}
+      <Card className="border border-gray-200/50 dark:border-gray-700/50 shadow-xl overflow-hidden">
+        {/* Header */}
+        <CardHeader className="flex flex-col gap-6 p-8 sm:p-12">
+          {/* Meta info */}
+          <div className="flex flex-wrap items-center gap-3">
+            <Chip color="primary" variant="flat" size="sm" className="font-medium">
+              {post.category.name}
+            </Chip>
+            <div className="flex items-center gap-1 text-sm text-gray-400">
+              <Calendar size={14} />
+              <span>{formatDate(post.createdAt)}</span>
+            </div>
+            <div className="flex items-center gap-1 text-sm text-gray-400">
+              <Clock size={14} />
+              <span>{post.readingTime} min read</span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight text-balance">
+            {post.title}
+          </h1>
+
+          {/* Author */}
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <Avatar
+                name={post.author?.name}
+                size="md"
+                color="primary"
+                isBordered
+                className="ring-2 ring-primary-200"
+              />
+              <div>
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  {post.author?.name}
+                </p>
+                <p className="text-sm text-gray-400">Author</p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2">
               {isAuthenticated && (
                 <>
                   <Button
@@ -157,6 +205,7 @@ const PostPage: React.FC<PostPageProps> = ({
                     variant="flat"
                     startContent={<Edit size={16} />}
                     size="sm"
+                    className="font-medium"
                   >
                     Edit
                   </Button>
@@ -167,6 +216,7 @@ const PostPage: React.FC<PostPageProps> = ({
                     onClick={handleDelete}
                     isLoading={isDeleting}
                     size="sm"
+                    className="font-medium"
                   >
                     Delete
                   </Button>
@@ -177,59 +227,64 @@ const PostPage: React.FC<PostPageProps> = ({
                 startContent={<Share size={16} />}
                 onClick={handleShare}
                 size="sm"
+                className="font-medium"
               >
                 Share
               </Button>
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold">{post.title}</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Avatar
-                name={post.author?.name}
-                size="sm"
-              />
-              <span className="text-default-600">{post.author?.name}</span>
-            </div>
-            <div className="flex items-center gap-2 text-default-500">
-              <Calendar size={16} />
-              <span>{formatDate(post.createdAt)}</span>
-            </div>
-            <div className="flex items-center gap-2 text-default-500">
-              <Clock size={16} />
-              <span>{post.readingTime} min read</span>
             </div>
           </div>
         </CardHeader>
 
         <Divider />
 
-        <CardBody>
-          <div 
-            className="prose max-w-none"
+        {/* Content */}
+        <CardBody className="p-8 sm:p-12">
+          <div
+            className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl prose-blockquote:border-primary prose-blockquote:bg-primary-50/50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg leading-relaxed"
             dangerouslySetInnerHTML={createSanitizedHTML(post.content)}
           />
+
+          {/* Engagement bar */}
+          <div className="flex items-center gap-4 mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <Button variant="light" startContent={<Heart size={18} />} className="text-gray-500">
+              0 Likes
+            </Button>
+            <Button variant="light" startContent={<MessageCircle size={18} />} className="text-gray-500">
+              0 Comments
+            </Button>
+            <Button variant="light" startContent={<Bookmark size={18} />} className="text-gray-500">
+              Save
+            </Button>
+          </div>
         </CardBody>
 
-        <CardFooter className="flex flex-col items-start gap-4">
-          <Divider />
-          <div className="flex flex-wrap gap-2">
-            <Chip color="primary" variant="flat">
-              {post.category.name}
-            </Chip>
-            {post.tags.map((tag) => (
-              <Chip
-                key={tag.id}
-                variant="flat"
-                startContent={<Tag size={14} />}
-              >
-                {tag.name}
-              </Chip>
-            ))}
+        <Divider />
+
+        {/* Footer - Tags */}
+        <CardFooter className="p-8 sm:p-12">
+          <div className="flex flex-col gap-4 w-full">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+              Tags
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <Chip
+                  key={tag.id}
+                  variant="flat"
+                  className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium"
+                  startContent={<Tag size={14} />}
+                >
+                  {tag.name}
+                </Chip>
+              ))}
+              {post.tags.length === 0 && (
+                <p className="text-sm text-gray-400">No tags</p>
+              )}
+            </div>
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </article>
   );
 };
 
