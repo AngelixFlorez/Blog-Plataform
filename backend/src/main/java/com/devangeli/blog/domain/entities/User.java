@@ -38,6 +38,9 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -47,16 +50,23 @@ public class User {
         User user = (User) o;
         return Objects.equals(id, user.id) && Objects.equals(email, user.email)
                 && Objects.equals(password, user.password) && Objects.equals(name, user.name)
-                && Objects.equals(createdAt, user.createdAt);
+                && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, name, createdAt);
+        return Objects.hash(id, email, password, name, createdAt, updatedAt);
     }
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

@@ -1,16 +1,16 @@
 package com.devangeli.blog.services.impl;
 
-import com.devangelilili.blog.domain.CreatePostRequest;
-import com.devangelilili.blog.domain.PostStatus;
-import com.devangelilili.blog.domain.UpdatePostRequest;
-import com.devangelilili.blog.domain.entities.Category;
-import com.devangelilili.blog.domain.entities.Post;
-import com.devangelilili.blog.domain.entities.Tag;
-import com.devangelilili.blog.domain.entities.User;
-import com.devangelilili.blog.repositories.PostRepository;
-import com.devangelilili.blog.services.CategoryService;
-import com.devangelilili.blog.services.PostService;
-import com.devangelilili.blog.services.TagService;
+import com.devangeli.blog.domain.CreatePostRequest;
+import com.devangeli.blog.domain.PostStatus;
+import com.devangeli.blog.domain.UpdatePostRequest;
+import com.devangeli.blog.domain.entities.Category;
+import com.devangeli.blog.domain.entities.Post;
+import com.devangeli.blog.domain.entities.Tag;
+import com.devangeli.blog.domain.entities.User;
+import com.devangeli.blog.repositories.PostRepository;
+import com.devangeli.blog.services.CategoryService;
+import com.devangeli.blog.services.PostService;
+import com.devangeli.blog.services.TagService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

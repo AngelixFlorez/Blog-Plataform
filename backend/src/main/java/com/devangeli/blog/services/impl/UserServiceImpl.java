@@ -1,8 +1,8 @@
 package com.devangeli.blog.services.impl;
 
-import com.devangelilili.blog.domain.entities.User;
-import com.devangelilili.blog.repositories.UserRepository;
-import com.devangelilili.blog.services.UserService;
+import com.devangeli.blog.domain.entities.User;
+import com.devangeli.blog.repositories.UserRepository;
+import com.devangeli.blog.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
