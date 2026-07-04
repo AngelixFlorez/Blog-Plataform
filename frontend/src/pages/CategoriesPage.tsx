@@ -242,15 +242,13 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
             />
           </ModalBody>
           <ModalFooter>
-            <Button variant="flat" onClick={handleModalClose} className="font-medium">
+            <Button onClick={handleModalClose} className="bg-gray-100 text-gray-700 hover:bg-gray-200 font-medium">
               Cancel
             </Button>
             <Button
-              color="primary"
-              variant="solid"
               onClick={handleAddEdit}
               isLoading={isSubmitting}
-              className="font-medium text-white shadow-lg shadow-primary/20"
+              className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20"
             >
               {editingCategory ? "Update" : "Create"}
             </Button>

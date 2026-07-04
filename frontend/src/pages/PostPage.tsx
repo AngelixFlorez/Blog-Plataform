@@ -141,9 +141,8 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId: _cu
       <Button
         as={Link}
         to="/"
-        variant="light"
         startContent={<ArrowLeft size={16} />}
-        className="mb-6 font-medium hover-lift"
+        className="mb-6 font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
         size="sm"
       >
         Back to Posts
@@ -205,24 +204,21 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId: _cu
                     Edit
                   </Button>
                   <Button
-                    color="danger"
-                    variant="flat"
                     startContent={<Trash size={16} />}
                     onClick={handleDelete}
                     isLoading={isDeleting}
                     size="sm"
-                    className="font-medium"
+                    className="bg-danger-50 text-danger-700 hover:bg-danger-100 font-medium"
                   >
                     Delete
                   </Button>
                 </>
               )}
               <Button
-                variant="flat"
                 startContent={<Share size={16} />}
                 onClick={handleShare}
                 size="sm"
-                className="font-medium"
+                className="bg-gray-100 text-gray-700 hover:bg-gray-200 font-medium"
               >
                 Share
               </Button>

@@ -245,16 +245,14 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="flat" onClick={handleModalClose} className="font-medium">
+            <Button onClick={handleModalClose} className="bg-gray-100 text-gray-700 hover:bg-gray-200 font-medium">
               Cancel
             </Button>
             <Button
-              color="primary"
-              variant="solid"
               onClick={handleAddTags}
               isLoading={isSubmitting}
               isDisabled={newTags.length === 0}
-              className="font-medium text-white shadow-lg shadow-primary/20"
+              className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20"
             >
               Add {newTags.length > 0 ? `(${newTags.length})` : ""} Tags
             </Button>

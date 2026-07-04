@@ -101,10 +101,8 @@ const NavBar: React.FC<NavBarProps> = ({
               <Button
                 as={Link}
                 to="/posts/drafts"
-                color="secondary"
-                variant="flat"
                 startContent={<BookDashed size={16} />}
-                className="font-medium hover-lift"
+                className="bg-primary-50 text-primary-700 hover:bg-primary-100 font-medium hover-lift"
                 size="sm"
               >
                 Drafts

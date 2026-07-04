@@ -376,11 +376,9 @@ const PostForm: React.FC<PostFormProps> = ({
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
             <Button
-              color="danger"
-              variant="flat"
               onClick={onCancel}
               isDisabled={isSubmitting}
-              className="font-medium"
+              className="bg-gray-100 text-gray-700 hover:bg-gray-200 font-medium"
             >
               Cancel
             </Button>

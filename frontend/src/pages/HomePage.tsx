@@ -127,10 +127,12 @@ const HomePage: React.FC = () => {
                 <div className="flex gap-2 flex-wrap">
                   <Button
                     size="sm"
-                    variant={selectedTag === undefined ? "solid" : "flat"}
-                    color={selectedTag === undefined ? "primary" : "default"}
                     onPress={() => setSelectedTag(undefined)}
-                    className={`rounded-full font-medium ${selectedTag === undefined ? 'text-white' : ''}`}
+                    className={`rounded-full font-medium ${
+                      selectedTag === undefined
+                        ? 'bg-primary-600 text-white hover:bg-primary-700'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
                   >
                     All
                   </Button>
@@ -138,14 +140,16 @@ const HomePage: React.FC = () => {
                     <Button
                       key={tag.id}
                       size="sm"
-                      variant={selectedTag === tag.id ? "solid" : "flat"}
-                      color={selectedTag === tag.id ? "primary" : "default"}
                       onPress={() =>
                         setSelectedTag(
                           selectedTag === tag.id ? undefined : tag.id
                         )
                       }
-                      className={`rounded-full font-medium ${selectedTag === tag.id ? 'text-white' : ''}`}
+                      className={`rounded-full font-medium ${
+                        selectedTag === tag.id
+                          ? 'bg-primary-600 text-white hover:bg-primary-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
                     >
                       {tag.name} ({tag.postCount || 0})
                     </Button>
