@@ -108,7 +108,7 @@ const RegisterPage = () => {
               <Button
                 type="submit"
                 color="primary"
-                variant="shadow"
+                variant="solid"
                 isLoading={isLoading}
                 className="w-full font-semibold text-base text-white shadow-lg shadow-primary/20"
                 size="lg"

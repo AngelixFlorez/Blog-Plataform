@@ -115,7 +115,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 as={Link}
                 to="/posts/new"
                 color="primary"
-                variant="shadow"
+                variant="solid"
                 startContent={<Plus size={16} />}
                 className="font-medium text-white shadow-lg shadow-primary/20 hover-lift"
                 size="sm"
@@ -172,8 +172,8 @@ const NavBar: React.FC<NavBarProps> = ({
                 as={Link}
                 to="/login"
                 color="primary"
-                variant="bordered"
-                className="font-medium border-2 transition-all duration-200"
+                variant="solid"
+                className="font-medium text-white"
                 size="sm"
               >
                 Log In

@@ -57,7 +57,7 @@ const DraftsPage: React.FC = () => {
             as={Link}
             to="/posts/new"
             color="primary"
-            variant="shadow"
+            variant="solid"
             startContent={<Plus size={16} />}
             className="font-medium text-white shadow-lg shadow-primary/20"
           >
@@ -97,7 +97,7 @@ const DraftsPage: React.FC = () => {
                 as={Link}
                 to="/posts/new"
                 color="primary"
-                variant="shadow"
+                variant="solid"
                 className="font-medium text-white shadow-lg shadow-primary/20"
               >
                 Create Your First Post

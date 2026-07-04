@@ -126,7 +126,7 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
           {isAuthenticated && (
             <Button
               color="primary"
-              variant="shadow"
+              variant="solid"
               startContent={<Plus size={16} />}
               onClick={onOpen}
               className="font-medium text-white shadow-lg shadow-primary/20"
@@ -250,7 +250,7 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
             </Button>
             <Button
               color="primary"
-              variant="shadow"
+              variant="solid"
               onClick={handleAddTags}
               isLoading={isSubmitting}
               isDisabled={newTags.length === 0}

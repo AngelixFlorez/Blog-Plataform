@@ -124,7 +124,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
           {isAuthenticated && (
             <Button
               color="primary"
-              variant="shadow"
+              variant="solid"
               startContent={<Plus size={16} />}
               onClick={openAddModal}
               className="font-medium text-white shadow-lg shadow-primary/20"
@@ -247,7 +247,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
             </Button>
             <Button
               color="primary"
-              variant="shadow"
+              variant="solid"
               onClick={handleAddEdit}
               isLoading={isSubmitting}
               className="font-medium text-white shadow-lg shadow-primary/20"

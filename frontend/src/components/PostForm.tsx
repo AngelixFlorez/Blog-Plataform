@@ -386,7 +386,7 @@ const PostForm: React.FC<PostFormProps> = ({
             </Button>
             <Button
               color="primary"
-              variant="shadow"
+              variant="solid"
               type="submit"
               isLoading={isSubmitting}
               className="font-medium text-white shadow-lg shadow-primary/20 min-w-[140px]"
