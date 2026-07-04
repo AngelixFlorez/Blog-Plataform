@@ -114,10 +114,8 @@ const NavBar: React.FC<NavBarProps> = ({
               <Button
                 as={Link}
                 to="/posts/new"
-                color="primary"
-                variant="solid"
                 startContent={<Plus size={16} />}
-                className="font-medium text-white shadow-lg shadow-primary/20 hover-lift"
+                className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20 hover-lift"
                 size="sm"
               >
                 New Post
@@ -171,9 +169,7 @@ const NavBar: React.FC<NavBarProps> = ({
               <Button
                 as={Link}
                 to="/login"
-                color="primary"
-                variant="solid"
-                className="font-medium text-white"
+                className="bg-primary-600 text-white hover:bg-primary-700 font-medium min-w-[80px]"
                 size="sm"
               >
                 Log In

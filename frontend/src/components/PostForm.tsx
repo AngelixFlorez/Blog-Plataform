@@ -385,11 +385,9 @@ const PostForm: React.FC<PostFormProps> = ({
               Cancel
             </Button>
             <Button
-              color="primary"
-              variant="solid"
               type="submit"
               isLoading={isSubmitting}
-              className="font-medium text-white shadow-lg shadow-primary/20 min-w-[140px]"
+              className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20 min-w-[140px]"
             >
               {initialPost ? 'Update' : 'Publish'} Post
             </Button>

@@ -124,10 +124,8 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId: _cu
             <Button
               as={Link}
               to="/"
-              color="primary"
-              variant="flat"
               startContent={<ArrowLeft size={16} />}
-              className="font-medium text-primary"
+              className="bg-primary-50 text-primary-700 hover:bg-primary-100 font-medium"
             >
               Back to Home
             </Button>
@@ -200,11 +198,9 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId: _cu
                   <Button
                     as={Link}
                     to={`/posts/${post.id}/edit`}
-                    color="primary"
-                    variant="flat"
                     startContent={<Edit size={16} />}
                     size="sm"
-                    className="font-medium"
+                    className="bg-primary-50 text-primary-700 hover:bg-primary-100 font-medium"
                   >
                     Edit
                   </Button>

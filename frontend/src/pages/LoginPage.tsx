@@ -85,10 +85,8 @@ const LoginPage = () => {
 
               <Button
                 type="submit"
-                color="primary"
-                variant="solid"
                 isLoading={isLoading}
-                className="w-full font-semibold text-base text-white shadow-lg shadow-primary/20"
+                className="w-full font-semibold text-base bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary/20"
                 size="lg"
               >
                 {isLoading ? 'Signing in...' : 'Sign in'}

@@ -35,7 +35,7 @@ class ErrorBoundary extends Component<Props, State> {
                 {this.state.error?.message || 'An unexpected error occurred'}
               </p>
               <Button
-                color="primary"
+                className="bg-primary-600 text-white hover:bg-primary-700"
                 onPress={() => {
                   this.setState({ hasError: false, error: null });
                   window.location.href = '/';
