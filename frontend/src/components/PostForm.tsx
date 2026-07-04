@@ -169,10 +169,9 @@ const PostForm: React.FC<PostFormProps> = ({
               <Dropdown>
                 <DropdownTrigger>
                   <Button
-                    variant="flat"
                     size="sm"
                     endContent={<ChevronDown size={14} />}
-                    className="font-medium"
+                    className="bg-gray-100 text-gray-700 hover:bg-gray-200 font-medium"
                   >
                     <Type size={16} className="mr-1" />
                     Heading
@@ -211,18 +210,16 @@ const PostForm: React.FC<PostFormProps> = ({
               <Button
                 size="sm"
                 isIconOnly
-                variant="flat"
                 onClick={() => editor?.chain().focus().toggleBold().run()}
-                className={editor?.isActive('bold') ? 'bg-primary-100 text-primary' : ''}
+                className={`text-gray-600 hover:bg-gray-200 ${editor?.isActive('bold') ? 'bg-primary-100 text-primary' : 'bg-gray-100'}`}
               >
                 <Bold size={16} />
               </Button>
               <Button
                 size="sm"
                 isIconOnly
-                variant="flat"
                 onClick={() => editor?.chain().focus().toggleItalic().run()}
-                className={editor?.isActive('italic') ? 'bg-primary-100 text-primary' : ''}
+                className={`text-gray-600 hover:bg-gray-200 ${editor?.isActive('italic') ? 'bg-primary-100 text-primary' : 'bg-gray-100'}`}
               >
                 <Italic size={16} />
               </Button>
@@ -232,18 +229,16 @@ const PostForm: React.FC<PostFormProps> = ({
               <Button
                 size="sm"
                 isIconOnly
-                variant="flat"
                 onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                className={editor?.isActive('bulletList') ? 'bg-primary-100 text-primary' : ''}
+                className={`text-gray-600 hover:bg-gray-200 ${editor?.isActive('bulletList') ? 'bg-primary-100 text-primary' : 'bg-gray-100'}`}
               >
                 <List size={16} />
               </Button>
               <Button
                 size="sm"
                 isIconOnly
-                variant="flat"
                 onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-                className={editor?.isActive('orderedList') ? 'bg-primary-100 text-primary' : ''}
+                className={`text-gray-600 hover:bg-gray-200 ${editor?.isActive('orderedList') ? 'bg-primary-100 text-primary' : 'bg-gray-100'}`}
               >
                 <ListOrdered size={16} />
               </Button>
@@ -253,18 +248,18 @@ const PostForm: React.FC<PostFormProps> = ({
               <Button
                 size="sm"
                 isIconOnly
-                variant="flat"
                 onClick={() => editor?.chain().focus().undo().run()}
                 isDisabled={!editor?.can().undo()}
+                className="bg-gray-100 text-gray-600 hover:bg-gray-200"
               >
                 <Undo size={16} />
               </Button>
               <Button
                 size="sm"
                 isIconOnly
-                variant="flat"
                 onClick={() => editor?.chain().focus().redo().run()}
                 isDisabled={!editor?.can().redo()}
+                className="bg-gray-100 text-gray-600 hover:bg-gray-200"
               >
                 <Redo size={16} />
               </Button>

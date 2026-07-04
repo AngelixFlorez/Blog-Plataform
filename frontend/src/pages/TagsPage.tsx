@@ -125,11 +125,9 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
           </div>
           {isAuthenticated && (
             <Button
-              color="primary"
-              variant="solid"
               startContent={<Plus size={16} />}
               onClick={onOpen}
-              className="font-medium text-white shadow-lg shadow-primary/20"
+              className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20"
             >
               Add Tags
             </Button>
@@ -182,12 +180,10 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
                       >
                         <Button
                           isIconOnly
-                          variant="flat"
-                          color="danger"
                           size="sm"
                           onClick={() => handleDelete(tag)}
                           isDisabled={tag?.postCount ? tag.postCount > 0 : false}
-                          className="hover-lift"
+                          className="bg-danger-50 text-danger-700 hover:bg-danger-100 hover-lift"
                         >
                           <Trash2 size={16} />
                         </Button>

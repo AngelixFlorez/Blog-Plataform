@@ -177,7 +177,6 @@ const NavBar: React.FC<NavBarProps> = ({
               <Button
                 as={Link}
                 to="/register"
-                variant="shadow"
                 className="font-medium bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 transition-all duration-200 border-none"
                 size="sm"
               >

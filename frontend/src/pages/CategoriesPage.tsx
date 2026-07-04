@@ -123,11 +123,9 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
           </div>
           {isAuthenticated && (
             <Button
-              color="primary"
-              variant="solid"
               startContent={<Plus size={16} />}
               onClick={openAddModal}
-              className="font-medium text-white shadow-lg shadow-primary/20"
+              className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20"
             >
               Add Category
             </Button>
@@ -175,10 +173,9 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
                         <Tooltip content="Edit category">
                           <Button
                             isIconOnly
-                            variant="flat"
                             size="sm"
                             onClick={() => openEditModal(category)}
-                            className="hover-lift"
+                            className="bg-primary-50 text-primary-700 hover:bg-primary-100 hover-lift"
                           >
                             <Edit2 size={16} />
                           </Button>
@@ -192,12 +189,10 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
                         >
                           <Button
                             isIconOnly
-                            variant="flat"
-                            color="danger"
                             size="sm"
                             onClick={() => handleDelete(category)}
                             isDisabled={category?.postCount ? category.postCount > 0 : false}
-                            className="hover-lift"
+                            className="bg-danger-50 text-danger-700 hover:bg-danger-100 hover-lift"
                           >
                             <Trash2 size={16} />
                           </Button>

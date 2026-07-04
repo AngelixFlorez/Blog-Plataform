@@ -56,10 +56,8 @@ const DraftsPage: React.FC = () => {
           <Button
             as={Link}
             to="/posts/new"
-            color="primary"
-            variant="solid"
             startContent={<Plus size={16} />}
-            className="font-medium text-white shadow-lg shadow-primary/20"
+            className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20"
           >
             New Post
           </Button>
@@ -96,9 +94,7 @@ const DraftsPage: React.FC = () => {
               <Button
                 as={Link}
                 to="/posts/new"
-                color="primary"
-                variant="solid"
-                className="font-medium text-white shadow-lg shadow-primary/20"
+                className="bg-primary-600 text-white hover:bg-primary-700 font-medium shadow-lg shadow-primary/20"
               >
                 Create Your First Post
               </Button>
