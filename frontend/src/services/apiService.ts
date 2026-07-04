@@ -102,7 +102,7 @@ class ApiService {
     this.api.interceptors.response.use(
       (response: AxiosResponse) => response,
       (error: AxiosError) => {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 && !error.config?.url?.includes('/auth/')) {
           localStorage.removeItem('token');
           window.location.href = '/login';
         }

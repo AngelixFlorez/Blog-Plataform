@@ -8,7 +8,6 @@ import com.devangeli.blog.services.AuthenticationService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -36,7 +35,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Profile("dev")
     public CommandLineRunner seedTestUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             String email = "user@test.com";
