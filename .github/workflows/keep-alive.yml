@@ -1,0 +1,10 @@
+name: Keep Render Awake
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -sS --max-time 30 https://blog-backend-a40u.onrender.com/api/v1/posts > /dev/null

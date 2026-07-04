@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { AuthProvider, useAuth } from "./components/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary";
+import KeepAlive from "./components/KeepAlive";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -98,6 +99,7 @@ function App() {
     <ErrorBoundary>
       <AuthProvider>
         <AppContent />
+        <KeepAlive />
       </AuthProvider>
     </ErrorBoundary>
   );
