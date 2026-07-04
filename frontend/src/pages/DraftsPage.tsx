@@ -59,7 +59,7 @@ const DraftsPage: React.FC = () => {
             color="primary"
             variant="shadow"
             startContent={<Plus size={16} />}
-            className="font-medium shadow-lg shadow-primary/20"
+            className="font-medium text-white shadow-lg shadow-primary/20"
           >
             New Post
           </Button>
@@ -98,7 +98,7 @@ const DraftsPage: React.FC = () => {
                 to="/posts/new"
                 color="primary"
                 variant="shadow"
-                className="font-medium shadow-lg shadow-primary/20"
+                className="font-medium text-white shadow-lg shadow-primary/20"
               >
                 Create Your First Post
               </Button>

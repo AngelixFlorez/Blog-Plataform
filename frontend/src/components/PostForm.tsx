@@ -389,7 +389,7 @@ const PostForm: React.FC<PostFormProps> = ({
               variant="shadow"
               type="submit"
               isLoading={isSubmitting}
-              className="font-medium shadow-lg shadow-primary/20 min-w-[140px]"
+              className="font-medium text-white shadow-lg shadow-primary/20 min-w-[140px]"
             >
               {initialPost ? 'Update' : 'Publish'} Post
             </Button>

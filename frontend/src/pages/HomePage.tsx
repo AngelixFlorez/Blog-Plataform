@@ -130,7 +130,7 @@ const HomePage: React.FC = () => {
                     variant={selectedTag === undefined ? "solid" : "flat"}
                     color={selectedTag === undefined ? "primary" : "default"}
                     onPress={() => setSelectedTag(undefined)}
-                    className="rounded-full font-medium"
+                    className={`rounded-full font-medium ${selectedTag === undefined ? 'text-white' : ''}`}
                   >
                     All
                   </Button>
@@ -145,7 +145,7 @@ const HomePage: React.FC = () => {
                           selectedTag === tag.id ? undefined : tag.id
                         )
                       }
-                      className="rounded-full font-medium"
+                      className={`rounded-full font-medium ${selectedTag === tag.id ? 'text-white' : ''}`}
                     >
                       {tag.name} ({tag.postCount || 0})
                     </Button>

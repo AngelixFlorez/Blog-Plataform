@@ -127,7 +127,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
               variant="shadow"
               startContent={<Plus size={16} />}
               onClick={openAddModal}
-              className="font-medium shadow-lg shadow-primary/20"
+              className="font-medium text-white shadow-lg shadow-primary/20"
             >
               Add Category
             </Button>
@@ -250,7 +250,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
               variant="shadow"
               onClick={handleAddEdit}
               isLoading={isSubmitting}
-              className="font-medium shadow-lg shadow-primary/20"
+              className="font-medium text-white shadow-lg shadow-primary/20"
             >
               {editingCategory ? "Update" : "Create"}
             </Button>

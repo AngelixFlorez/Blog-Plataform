@@ -127,7 +127,7 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId: _cu
               color="primary"
               variant="flat"
               startContent={<ArrowLeft size={16} />}
-              className="font-medium"
+              className="font-medium text-primary"
             >
               Back to Home
             </Button>

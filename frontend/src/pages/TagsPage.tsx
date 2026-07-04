@@ -129,7 +129,7 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
               variant="shadow"
               startContent={<Plus size={16} />}
               onClick={onOpen}
-              className="font-medium shadow-lg shadow-primary/20"
+              className="font-medium text-white shadow-lg shadow-primary/20"
             >
               Add Tags
             </Button>
@@ -254,7 +254,7 @@ const TagsPage: React.FC<TagsPageProps> = ({ isAuthenticated }) => {
               onClick={handleAddTags}
               isLoading={isSubmitting}
               isDisabled={newTags.length === 0}
-              className="font-medium shadow-lg shadow-primary/20"
+              className="font-medium text-white shadow-lg shadow-primary/20"
             >
               Add {newTags.length > 0 ? `(${newTags.length})` : ""} Tags
             </Button>
