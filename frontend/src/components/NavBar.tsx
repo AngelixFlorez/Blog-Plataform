@@ -129,7 +129,10 @@ const NavBar: React.FC<NavBarProps> = ({
                     size="sm"
                     src={userProfile?.avatar}
                     name={userProfile?.name}
-                    color="primary"
+                    classNames={{
+                      base: "bg-primary-100",
+                      name: "text-primary-700 font-semibold"
+                    }}
                   />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="User menu" className="w-48">
