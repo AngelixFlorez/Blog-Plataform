@@ -147,7 +147,7 @@ class ApiService {
     }
   }
 
-  public async getUserProfile(authToken?: string): Promise<UserProfile> {
+  public async getUserProfile(_authToken?: string): Promise<UserProfile> {
     const response: AxiosResponse<UserProfile> = await this.api.get('/auth/profile');
     return response.data;
   }

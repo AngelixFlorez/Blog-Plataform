@@ -10,7 +10,6 @@ import {
   Button,
   Divider,
   Avatar,
-  Spinner,
 } from '@nextui-org/react';
 import {
   Calendar,
@@ -32,7 +31,7 @@ interface PostPageProps {
   currentUserId?: string;
 }
 
-const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId }) => {
+const PostPage: React.FC<PostPageProps> = ({ isAuthenticated, currentUserId: _currentUserId }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | undefined>(undefined);
