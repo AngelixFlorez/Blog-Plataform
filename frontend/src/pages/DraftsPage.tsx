@@ -14,21 +14,15 @@ const DraftsPage: React.FC = () => {
   const [drafts, setDrafts] = useState<Post[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState("updatedAt,desc");
 
   useEffect(() => {
     const fetchDrafts = async () => {
       try {
         setLoading(true);
-        const response = await apiService.getDrafts({
-          page: page - 1,
-          size: 10,
-          sort: sortBy,
-        });
+        const response = await apiService.getDrafts({});
         setDrafts(response);
         setError(null);
-      } catch (err) {
+      } catch {
         setError('Failed to load drafts. Please try again later.');
       } finally {
         setLoading(false);
@@ -36,7 +30,7 @@ const DraftsPage: React.FC = () => {
     };
 
     fetchDrafts();
-  }, [page, sortBy]);
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
@@ -74,10 +68,6 @@ const DraftsPage: React.FC = () => {
             posts={drafts}
             loading={loading}
             error={error}
-            page={page}
-            sortBy={sortBy}
-            onPageChange={setPage}
-            onSortChange={setSortBy}
           />
 
           {drafts?.length === 0 && !loading && (

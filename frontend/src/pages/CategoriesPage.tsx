@@ -48,7 +48,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
       const response = await apiService.getCategories();
       setCategories(response);
       setError(null);
-    } catch (err) {
+    } catch {
       setError("Failed to load categories. Please try again later.");
     } finally {
       setLoading(false);
@@ -69,7 +69,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
       }
       await fetchCategories();
       handleModalClose();
-    } catch (err) {
+    } catch {
       setError(`Failed to ${editingCategory ? "update" : "create"} category.`);
     } finally {
       setIsSubmitting(false);
@@ -83,7 +83,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ isAuthenticated }) => {
       await apiService.deleteCategory(category.id);
       toast.success("Category deleted successfully");
       await fetchCategories();
-    } catch (err) {
+    } catch {
       setError("Failed to delete category.");
     }
   };

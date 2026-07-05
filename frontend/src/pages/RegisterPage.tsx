@@ -23,11 +23,9 @@ const RegisterPage = () => {
       localStorage.setItem('token', response.token);
       toast.success('Account created successfully!');
       navigate('/');
-    } catch (err: any) {
+    } catch (err) {
       setError(
-        err.response?.data?.message ||
-          err.message ||
-          'Failed to register. Please try again.'
+        err instanceof Error ? err.message : 'Failed to register. Please try again.'
       );
     } finally {
       setIsLoading(false);

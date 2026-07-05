@@ -28,8 +28,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [isInitializing, setIsInitializing] = useState(true);
 
-  const fetchProfile = useCallback(async (authToken: string) => {
-    const profile = await apiService.getUserProfile(authToken);
+  const fetchProfile = useCallback(async () => {
+    const profile = await apiService.getUserProfile();
     setUser({
       id: profile.id,
       name: profile.name,
@@ -43,10 +43,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const storedToken = localStorage.getItem('token');
       if (storedToken) {
         try {
-          await fetchProfile(storedToken);
+          await fetchProfile();
           setIsAuthenticated(true);
           setToken(storedToken);
-        } catch (error) {
+        } catch {
           localStorage.removeItem('token');
           setIsAuthenticated(false);
           setUser(null);
@@ -68,7 +68,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsAuthenticated(true);
 
     try {
-      await fetchProfile(authToken);
+      await fetchProfile();
     } catch {
       // Profile fetch is best-effort after login
     }

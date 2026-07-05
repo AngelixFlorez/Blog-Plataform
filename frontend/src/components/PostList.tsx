@@ -9,20 +9,12 @@ interface PostListProps {
   posts: Post[] | null;
   loading: boolean;
   error: string | null;
-  page: number;
-  sortBy: string;
-  onPageChange: (page: number) => void;
-  onSortChange: (sortBy: string) => void;
 }
 
 const PostList: React.FC<PostListProps> = ({
   posts,
   loading,
   error,
-  page: _page,
-  sortBy: _sortBy,
-  onPageChange: _onPageChange,
-  onSortChange: _onSortChange,
 }) => {
   const navigate = useNavigate();
 

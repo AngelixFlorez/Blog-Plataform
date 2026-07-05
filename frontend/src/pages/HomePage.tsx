@@ -17,8 +17,6 @@ const HomePage: React.FC = () => {
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState("createdAt,desc");
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
 
@@ -39,7 +37,7 @@ const HomePage: React.FC = () => {
         setCategories(categoriesResponse);
         setTags(tagsResponse);
         setError(null);
-      } catch (err) {
+      } catch {
         setError('Failed to load content. Please try again later.');
       } finally {
         setLoading(false);
@@ -47,7 +45,7 @@ const HomePage: React.FC = () => {
     };
 
     fetchData();
-  }, [page, sortBy, selectedCategory, selectedTag]);
+  }, [selectedCategory, selectedTag]);
 
   const handleCategoryChange = (categoryId: string | undefined) => {
     if ('all' === categoryId) {
@@ -167,10 +165,6 @@ const HomePage: React.FC = () => {
           posts={posts}
           loading={loading}
           error={error}
-          page={page}
-          sortBy={sortBy}
-          onPageChange={setPage}
-          onSortChange={setSortBy}
         />
       </section>
     </div>

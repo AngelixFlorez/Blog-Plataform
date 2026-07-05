@@ -20,8 +20,8 @@ const LoginPage = () => {
     try {
       await login(email, password);
       navigate('/');
-    } catch (err: any) {
-      setError(err.message || 'Invalid email or password. Please try again.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Invalid email or password. Please try again.');
     } finally {
       setIsLoading(false);
     }
