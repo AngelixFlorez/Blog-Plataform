@@ -18,7 +18,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Heading from '@tiptap/extension-heading';
 import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
-import ListItem from '@tiptap/extension-list-item';
+
 import {
   Bold,
   Italic,
@@ -73,7 +73,6 @@ const PostForm: React.FC<PostFormProps> = ({
       Heading.configure({ levels: [1, 2, 3] }),
       BulletList.configure({ keepMarks: true, keepAttributes: false }),
       OrderedList.configure({ keepMarks: true, keepAttributes: false }),
-      ListItem,
     ],
     content: initialPost?.content || '',
     editorProps: {
@@ -290,7 +289,7 @@ const PostForm: React.FC<PostFormProps> = ({
             }}
           >
             {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id}>
+              <SelectItem key={cat.id} value={cat.id} textValue={cat.name}>
                 {cat.name}
               </SelectItem>
             ))}
@@ -313,6 +312,7 @@ const PostForm: React.FC<PostFormProps> = ({
                     <SelectItem
                       key={tag.id}
                       value={tag.id}
+                      textValue={tag.name}
                       onClick={() => handleTagAdd(tag)}
                     >
                       {tag.name}
@@ -354,17 +354,25 @@ const PostForm: React.FC<PostFormProps> = ({
             }}
             variant="bordered"
             disallowEmptySelection
+            renderValue={(items) => {
+              return items.map((item) => (
+                <span key={item.key} className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${item.key === PostStatus.DRAFT ? 'bg-warning' : 'bg-success'}`} />
+                  {item.textValue}
+                </span>
+              ));
+            }}
             classNames={{
               label: 'text-sm font-medium',
             }}
           >
-            <SelectItem key={PostStatus.DRAFT}>
+            <SelectItem key={PostStatus.DRAFT} textValue="Draft">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-warning" />
                 Draft
               </div>
             </SelectItem>
-            <SelectItem key={PostStatus.PUBLISHED}>
+            <SelectItem key={PostStatus.PUBLISHED} textValue="Published">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-success" />
                 Published

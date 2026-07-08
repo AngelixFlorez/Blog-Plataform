@@ -2,25 +2,69 @@ package com.devangeli.blog.mappers;
 
 import com.devangeli.blog.domain.CreatePostRequest;
 import com.devangeli.blog.domain.UpdatePostRequest;
+import com.devangeli.blog.domain.dtos.AuthorDto;
+import com.devangeli.blog.domain.dtos.CategoryDto;
 import com.devangeli.blog.domain.dtos.CreatePostRequestDto;
 import com.devangeli.blog.domain.dtos.PostDto;
+import com.devangeli.blog.domain.dtos.TagDto;
 import com.devangeli.blog.domain.dtos.UpdatePostRequestDto;
 import com.devangeli.blog.domain.entities.Post;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import com.devangeli.blog.domain.entities.Tag;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface PostMapper {
+import java.util.stream.Collectors;
 
-    @Mapping(target = "author", source = "author")
-    @Mapping(target = "category", source = "category")
-    @Mapping(target = "tags", source = "tags")
-    @Mapping(target = "status", source = "status")
-    PostDto toDto(Post post);
+@Component
+public class PostMapper {
 
-    CreatePostRequest toCreatePostRequest(CreatePostRequestDto dto);
+    public PostDto toDto(Post post) {
+        if (post == null) return null;
 
-    UpdatePostRequest toUpdatePostRequest(UpdatePostRequestDto dto);
+        return PostDto.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .status(post.getStatus())
+                .readingTime(post.getReadingTime())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .author(AuthorDto.builder()
+                        .id(post.getAuthor().getId())
+                        .name(post.getAuthor().getName())
+                        .build())
+                .category(CategoryDto.builder()
+                        .id(post.getCategory().getId())
+                        .name(post.getCategory().getName())
+                        .build())
+                .tags(post.getTags().stream()
+                        .map(tag -> TagDto.builder()
+                                .id(tag.getId())
+                                .name(tag.getName())
+                                .build())
+                        .collect(Collectors.toSet()))
+                .build();
+    }
 
+    public CreatePostRequest toCreatePostRequest(CreatePostRequestDto dto) {
+        if (dto == null) return null;
+        return CreatePostRequest.builder()
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .categoryId(dto.getCategoryId())
+                .tagIds(dto.getTagIds())
+                .status(dto.getStatus())
+                .build();
+    }
+
+    public UpdatePostRequest toUpdatePostRequest(UpdatePostRequestDto dto) {
+        if (dto == null) return null;
+        return UpdatePostRequest.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .categoryId(dto.getCategoryId())
+                .tagIds(dto.getTagIds())
+                .status(dto.getStatus())
+                .build();
+    }
 }
