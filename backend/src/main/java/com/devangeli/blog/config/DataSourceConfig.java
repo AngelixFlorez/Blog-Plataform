@@ -24,24 +24,27 @@ public class DataSourceConfig {
             throw new IllegalStateException("NEON_DATABASE_URL environment variable is not set");
         }
 
-        String cleanedUrl = rawUrl.replaceAll("&?channel_binding=[^&]+", "");
+        String sanitized = rawUrl.replaceAll("&?channel_binding=[^&]+", "");
 
-        URI dbUri = new URI(cleanedUrl);
+        URI dbUri = new URI(sanitized);
+
         String host = dbUri.getHost();
         int port = dbUri.getPort();
-        String path = dbUri.getPath().substring(1);
-        String userInfo = dbUri.getUserInfo();
+        if (port == -1) {
+            port = 5432;
+        }
+        String dbName = dbUri.getPath().substring(1);
 
+        String userInfo = dbUri.getUserInfo();
         if (userInfo == null) {
             throw new IllegalStateException("NEON_DATABASE_URL must contain user:password@host");
         }
-
-        String[] userPass = userInfo.split(":");
+        String[] userPass = userInfo.split(":", 2);
         String username = userPass[0];
         String password = userPass.length > 1 ? userPass[1] : "";
 
         String query = dbUri.getQuery() == null ? "" : "?" + dbUri.getQuery();
-        String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + path + query;
+        String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName + query;
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(jdbcUrl);
