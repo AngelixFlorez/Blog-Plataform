@@ -16,5 +16,5 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=backend-build /app/target/*.jar app.jar
 COPY --from=frontend-build /app/frontend/dist ./public
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE ${PORT:-8080}
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
