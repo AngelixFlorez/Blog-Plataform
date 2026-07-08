@@ -13,12 +13,12 @@ public class DataSourceConfig {
 
     @Bean
     public DataSource dataSource() {
-        String rawUrl = System.getenv("DATABASE_URL");
+        String rawUrl = System.getenv("NEON_DATABASE_URL");
         if (rawUrl == null || rawUrl.isBlank()) {
-            rawUrl = System.getProperty("DATABASE_URL", "");
+            rawUrl = System.getProperty("NEON_DATABASE_URL", "");
         }
         if (rawUrl.isBlank()) {
-            throw new IllegalStateException("DATABASE_URL environment variable is not set");
+            throw new IllegalStateException("NEON_DATABASE_URL environment variable is not set");
         }
 
         String cleanedUrl = rawUrl.replaceAll("&?channel_binding=[^&]+", "");
