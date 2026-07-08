@@ -1,6 +1,20 @@
 version: "3.9"
 
 services:
+  blog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DATABASE_URL: postgresql://postgres:changemeinprod!@postgres:5432/blog?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET:-your-256-bit-secret-key-here-make-it-at-least-32-bytes-long}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   postgres:
     image: postgres:16-alpine
     environment:
@@ -17,25 +31,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-  backend:
-    build: ./backend
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-      JWT_SECRET: ${JWT_SECRET:-your-256-bit-secret-key-here-make-it-at-least-32-bytes-long}
-      DB_PASSWORD: ${DB_PASSWORD:-changemeinprod!}
-    ports:
-      - "8080:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
 
   adminer:
     image: adminer
