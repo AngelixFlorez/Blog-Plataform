@@ -33,7 +33,7 @@ import {
   Image as ImageIcon,
   Loader2,
 } from 'lucide-react';
-import { Post, Category, Tag, PostStatus, apiService } from '../services/apiService';
+import { Post, Category, Tag, PostStatus } from '../services/apiService';
 
 interface PostFormProps {
   initialPost?: Post | null;

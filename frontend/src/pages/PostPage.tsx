@@ -6,7 +6,6 @@ import {
   CardBody,
   Chip,
   Button,
-  Divider,
   Input,
 } from '@nextui-org/react';
 import {
