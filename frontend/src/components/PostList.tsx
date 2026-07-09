@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, CardFooter, CardHeader, Chip } from '@nextui-org/react';
 import { Post } from '../services/apiService';
-import { Calendar, Clock, Tag, ArrowRight, User, PenSquare } from 'lucide-react';
+import { Calendar, Tag, ArrowRight, User, PenSquare } from 'lucide-react';
 import { createExcerpt } from '../utils/sanitize';
 
 interface PostListProps {
