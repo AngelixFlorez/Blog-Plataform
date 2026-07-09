@@ -10,12 +10,21 @@ import com.devangeli.blog.domain.dtos.TagDto;
 import com.devangeli.blog.domain.dtos.UpdatePostRequestDto;
 import com.devangeli.blog.domain.entities.Post;
 import com.devangeli.blog.domain.entities.Tag;
+import com.devangeli.blog.repositories.BookmarkRepository;
+import com.devangeli.blog.repositories.CommentRepository;
+import com.devangeli.blog.repositories.LikeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class PostMapper {
+
+    private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     public PostDto toDto(Post post) {
         if (post == null) return null;
@@ -42,6 +51,8 @@ public class PostMapper {
                                 .name(tag.getName())
                                 .build())
                         .collect(Collectors.toSet()))
+                .likeCount(likeRepository.countByPost(post))
+                .commentCount(commentRepository.countByPost(post))
                 .build();
     }
 

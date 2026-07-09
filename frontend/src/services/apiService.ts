@@ -43,6 +43,34 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   status?: PostStatus;
+  likeCount?: number;
+  commentCount?: number;
+}
+
+export interface LikeDto {
+  id?: string;
+  postId: string;
+  userId?: string;
+  userName?: string;
+  likeCount: number;
+  liked: boolean;
+}
+
+export interface BookmarkDto {
+  id?: string;
+  postId: string;
+  userId?: string;
+  bookmarked: boolean;
+  bookmarkCount: number;
+}
+
+export interface CommentDto {
+  id: string;
+  content: string;
+  userId: string;
+  userName: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreatePostRequest {
@@ -229,7 +257,54 @@ class ApiService {
   public async deleteTag(id: string): Promise<void> {
     await this.api.delete(`/tags/${id}`);
   }
+
+  // Like endpoints
+  public async toggleLike(postId: string): Promise<LikeDto> {
+    const response: AxiosResponse<LikeDto> = await this.api.post(`/posts/${postId}/like`);
+    return response.data;
+  }
+
+  public async getLikeStatus(postId: string): Promise<LikeDto> {
+    const response: AxiosResponse<LikeDto> = await this.api.get(`/posts/${postId}/like`);
+    return response.data;
+  }
+
+  public async getUserLikes(): Promise<LikeDto[]> {
+    const response: AxiosResponse<LikeDto[]> = await this.api.get('/likes');
+    return response.data;
+  }
+
+  // Bookmark endpoints
+  public async toggleBookmark(postId: string): Promise<BookmarkDto> {
+    const response: AxiosResponse<BookmarkDto> = await this.api.post(`/posts/${postId}/bookmark`);
+    return response.data;
+  }
+
+  public async getBookmarkStatus(postId: string): Promise<BookmarkDto> {
+    const response: AxiosResponse<BookmarkDto> = await this.api.get(`/posts/${postId}/bookmark`);
+    return response.data;
+  }
+
+  public async getUserBookmarks(): Promise<BookmarkDto[]> {
+    const response: AxiosResponse<BookmarkDto[]> = await this.api.get('/bookmarks');
+    return response.data;
+  }
+
+  // Comment endpoints
+  public async getComments(postId: string): Promise<CommentDto[]> {
+    const response: AxiosResponse<CommentDto[]> = await this.api.get(`/posts/${postId}/comments`);
+    return response.data;
+  }
+
+  public async createComment(postId: string, content: string): Promise<CommentDto> {
+    const response: AxiosResponse<CommentDto> = await this.api.post(`/posts/${postId}/comments`, { content });
+    return response.data;
+  }
+
+  public async deleteComment(postId: string, commentId: string): Promise<void> {
+    await this.api.delete(`/posts/${postId}/comments/${commentId}`);
+  }
 }
 
-// Export a singleton instance
+// Export the singleton instance
 export const apiService = ApiService.getInstance();

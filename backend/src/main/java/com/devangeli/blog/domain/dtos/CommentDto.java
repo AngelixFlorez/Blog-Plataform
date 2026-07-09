@@ -1,30 +1,22 @@
 package com.devangeli.blog.domain.dtos;
 
-import com.devangeli.blog.domain.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostDto {
+public class CommentDto {
     private UUID id;
-    private String title;
     private String content;
-    private AuthorDto author;
-    private CategoryDto category;
-    private Set<TagDto> tags;
-    private Integer readingTime;
+    private UUID userId;
+    private String userName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private PostStatus status;
-    private long likeCount;
-    private long commentCount;
 }

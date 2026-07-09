@@ -8,6 +8,8 @@ import PostPage from "./pages/PostPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import TagsPage from "./pages/TagsPage";
 import DraftsPage from "./pages/DraftsPage";
+import MyLikesPage from "./pages/MyLikesPage";
+import MySavesPage from "./pages/MySavesPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { AuthProvider, useAuth } from "./components/AuthContext";
@@ -84,6 +86,22 @@ function AppContent() {
               element={
                 <ProtectedRoute>
                   <DraftsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-likes"
+              element={
+                <ProtectedRoute>
+                  <MyLikesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-saves"
+              element={
+                <ProtectedRoute>
+                  <MySavesPage />
                 </ProtectedRoute>
               }
             />

@@ -348,35 +348,21 @@ const PostForm: React.FC<PostFormProps> = ({
             label="Status"
             placeholder="Select status"
             selectedKeys={[status]}
-            onSelectionChange={(keys) => {
-              const value = Array.from(keys)[0] as string;
+            onChange={(e) => {
+              const value = e.target.value;
               if (value) setStatus(value as PostStatus);
             }}
             variant="bordered"
             disallowEmptySelection
-            renderValue={(items) => {
-              return items.map((item) => (
-                <span key={item.key} className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${item.key === PostStatus.DRAFT ? 'bg-warning' : 'bg-success'}`} />
-                  {item.textValue}
-                </span>
-              ));
-            }}
             classNames={{
               label: 'text-sm font-medium',
             }}
           >
-            <SelectItem key={PostStatus.DRAFT} textValue="Draft">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-warning" />
-                Draft
-              </div>
+            <SelectItem key={PostStatus.DRAFT} value={PostStatus.DRAFT}>
+              Draft
             </SelectItem>
-            <SelectItem key={PostStatus.PUBLISHED} textValue="Published">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-success" />
-                Published
-              </div>
+            <SelectItem key={PostStatus.PUBLISHED} value={PostStatus.PUBLISHED}>
+              Published
             </SelectItem>
           </Select>
 

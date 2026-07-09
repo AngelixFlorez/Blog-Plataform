@@ -15,7 +15,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from '@nextui-org/react';
-import { Plus, Edit3, LogOut, BookDashed } from 'lucide-react';
+import { Plus, Edit3, LogOut, BookDashed, Heart, Bookmark } from 'lucide-react';
 
 interface NavBarProps {
   isAuthenticated: boolean;
@@ -135,7 +135,7 @@ const NavBar: React.FC<NavBarProps> = ({
                     }}
                   />
                 </DropdownTrigger>
-                <DropdownMenu aria-label="User menu" className="w-48">
+                <DropdownMenu aria-label="User menu" className="w-56">
                   <DropdownItem
                     key="profile"
                     className="h-14 gap-2"
@@ -150,6 +150,20 @@ const NavBar: React.FC<NavBarProps> = ({
                     onPress={() => navigate('/posts/drafts')}
                   >
                     My Drafts
+                  </DropdownItem>
+                  <DropdownItem
+                    key="my-likes"
+                    startContent={<Heart size={16} className="text-red-500" />}
+                    onPress={() => navigate('/my-likes')}
+                  >
+                    My Likes
+                  </DropdownItem>
+                  <DropdownItem
+                    key="my-saves"
+                    startContent={<Bookmark size={16} className="text-primary-500" />}
+                    onPress={() => navigate('/my-saves')}
+                  >
+                    My Saves
                   </DropdownItem>
                   <DropdownItem
                     key="logout"
