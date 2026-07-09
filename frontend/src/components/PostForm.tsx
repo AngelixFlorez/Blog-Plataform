@@ -32,8 +32,10 @@ import {
   Type,
   Image as ImageIcon,
   Loader2,
+  Smile,
 } from 'lucide-react';
 import { Post, Category, Tag, PostStatus } from '../services/apiService';
+import EmojiPicker from './EmojiPicker';
 
 interface PostFormProps {
   initialPost?: Post | null;
@@ -305,6 +307,18 @@ const PostForm: React.FC<PostFormProps> = ({
               >
                 {uploadingImage ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
               </Button>
+
+              <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+
+              <EmojiPicker onEmojiSelect={(emoji) => editor?.chain().focus().insertContent(emoji).run()}>
+                <Button
+                  size="sm"
+                  isIconOnly
+                  className="bg-gray-100 text-gray-600 hover:bg-gray-200"
+                >
+                  <Smile size={16} />
+                </Button>
+              </EmojiPicker>
 
               <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
 

@@ -107,6 +107,9 @@ function AppContent() {
             />
           </Routes>
         </main>
+        <footer className="text-center py-6 text-gray-400 text-sm border-t border-gray-200 dark:border-gray-800">
+          &copy; 2026 Bloggeo
+        </footer>
       </div>
     </BrowserRouter>
   );

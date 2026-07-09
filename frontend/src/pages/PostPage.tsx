@@ -22,10 +22,12 @@ import {
   Trash2,
   Image as ImageIcon,
   Loader2,
+  Smile,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { apiService, Post, CommentDto } from '../services/apiService';
 import { useAuth } from '../components/AuthContext';
+import EmojiPicker from '../components/EmojiPicker';
 
 const AuthorAvatar = ({ name, size = 'md' }: { name?: string; size?: 'sm' | 'md' | 'lg' }) => {
   const initials = (name || 'A').substring(0, 3).toUpperCase();
@@ -254,7 +256,7 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
         Back to Posts
       </Button>
 
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 via-primary-500 to-purple-600 p-8 sm:p-14 mb-8 shadow-2xl shadow-primary-200/50">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 via-primary-500 to-purple-600 p-6 sm:p-10 mb-6 shadow-2xl shadow-primary-200/50">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-300/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
@@ -300,13 +302,13 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
       </div>
 
       <Card className="border-none shadow-xl bg-white dark:bg-gray-900 overflow-hidden rounded-3xl -mt-6 relative z-10 mx-2 sm:mx-6">
-        <CardBody className="p-8 sm:p-14">
+        <CardBody className="p-6 sm:p-10">
           <div
             className="prose prose-lg max-w-none dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-2xl prose-img:shadow-lg prose-blockquote:border-l-primary prose-blockquote:bg-primary-50/50 dark:prose-blockquote:bg-primary-900/20 prose-blockquote:py-3 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl leading-relaxed prose-p:leading-8"
             dangerouslySetInnerHTML={createSanitizedHTML(post.content)}
           />
 
-          <div className="flex flex-wrap items-center gap-3 mt-14 pt-10 border-t border-gray-100 dark:border-gray-800">
+          <div className="flex flex-wrap items-center gap-3 mt-8 pt-5 border-t border-gray-100 dark:border-gray-800">
             <Button
               variant="light"
               startContent={<Heart size={20} className={`transition-all ${liked ? 'fill-red-500 text-red-500 scale-110' : ''}`} />}
@@ -334,7 +336,7 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
             </Button>
             </div>
 
-          <div className="mt-14 pt-10 border-t border-gray-100 dark:border-gray-800">
+          <div className="mt-8 pt-5 border-t border-gray-100 dark:border-gray-800">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
               <div className="p-2 rounded-xl bg-primary-50 dark:bg-primary-900/30">
                 <MessageCircle size={20} className="text-primary" />
@@ -373,6 +375,14 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
                   >
                     {uploadingCommentImage ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
                   </Button>
+                  <EmojiPicker onEmojiSelect={(emoji) => setNewComment(prev => prev + emoji)}>
+                    <Button
+                      isIconOnly
+                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-xl min-w-10 h-10"
+                    >
+                      <Smile size={16} />
+                    </Button>
+                  </EmojiPicker>
                   <Button
                     isIconOnly
                     onPress={handleSubmitComment}
