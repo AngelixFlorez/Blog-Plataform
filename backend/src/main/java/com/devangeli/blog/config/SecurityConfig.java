@@ -63,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/upload").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/posts/*/like").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/posts/*/bookmark").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/posts/*/comments").authenticated()

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Button,
   Card,
@@ -18,6 +18,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Heading from '@tiptap/extension-heading';
 import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
+import Image from '@tiptap/extension-image';
 
 import {
   Bold,
@@ -29,8 +30,10 @@ import {
   ChevronDown,
   X,
   Type,
+  Image as ImageIcon,
+  Loader2,
 } from 'lucide-react';
-import { Post, Category, Tag, PostStatus } from '../services/apiService';
+import { Post, Category, Tag, PostStatus, apiService } from '../services/apiService';
 
 interface PostFormProps {
   initialPost?: Post | null;
@@ -62,6 +65,8 @@ const PostForm: React.FC<PostFormProps> = ({
     initialPost?.status || PostStatus.DRAFT
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [
@@ -73,6 +78,7 @@ const PostForm: React.FC<PostFormProps> = ({
       Heading.configure({ levels: [1, 2, 3] }),
       BulletList.configure({ keepMarks: true, keepAttributes: false }),
       OrderedList.configure({ keepMarks: true, keepAttributes: false }),
+      Image.configure({ inline: false }),
     ],
     content: initialPost?.content || '',
     editorProps: {
@@ -131,6 +137,45 @@ const PostForm: React.FC<PostFormProps> = ({
 
   const handleTagRemove = (tagToRemove: Tag) => {
     setSelectedTags(selectedTags.filter((tag) => tag !== tagToRemove));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setErrors({ ...errors, content: 'Only image files are allowed' });
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setErrors({ ...errors, content: 'Image must be less than 10MB' });
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/v1/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error('Upload failed');
+
+      const data = await response.json();
+      editor?.chain().focus().setImage({ src: data.url }).run();
+    } catch {
+      setErrors({ ...errors, content: 'Failed to upload image' });
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleHeadingSelect = (level: number) => {
@@ -240,6 +285,25 @@ const PostForm: React.FC<PostFormProps> = ({
                 className={`text-gray-600 hover:bg-gray-200 ${editor?.isActive('orderedList') ? 'bg-primary-100 text-primary' : 'bg-gray-100'}`}
               >
                 <ListOrdered size={16} />
+              </Button>
+
+              <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                accept="image/*"
+                className="hidden"
+              />
+              <Button
+                size="sm"
+                isIconOnly
+                onClick={() => fileInputRef.current?.click()}
+                isLoading={uploadingImage}
+                className="bg-gray-100 text-gray-600 hover:bg-gray-200"
+              >
+                {uploadingImage ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
               </Button>
 
               <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
