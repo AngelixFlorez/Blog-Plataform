@@ -5,7 +5,6 @@ import {
   CardBody,
   CardHeader,
   Button,
-  Spinner,
 } from '@nextui-org/react';
 import { Bookmark, ArrowLeft } from 'lucide-react';
 import { apiService, Post, BookmarkDto } from '../services/apiService';

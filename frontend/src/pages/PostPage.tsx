@@ -27,7 +27,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { apiService, Post, CommentDto, PostStatus } from '../services/apiService';
+import { apiService, Post, CommentDto } from '../services/apiService';
 import { useAuth } from '../components/AuthContext';
 
 interface PostPageProps {
