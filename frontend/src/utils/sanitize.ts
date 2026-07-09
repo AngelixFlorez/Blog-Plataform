@@ -1,7 +1,7 @@
 import DOMPurify from 'dompurify';
 
-const ALLOWED_TAGS = ['p', 'strong', 'em', 'br', 'h1', 'h2', 'h3', 'ul', 'ol', 'li'];
-const ALLOWED_ATTR: string[] = [];
+const ALLOWED_TAGS = ['p', 'strong', 'em', 'br', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'img'];
+const ALLOWED_ATTR = ['src', 'alt', 'title'];
 
 export function sanitizeHTML(content: string): string {
   return DOMPurify.sanitize(content, {

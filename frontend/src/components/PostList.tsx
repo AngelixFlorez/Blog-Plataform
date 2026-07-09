@@ -143,10 +143,7 @@ const PostList: React.FC<PostListProps> = ({
                 <span>{formatDate(post.createdAt)}</span>
               </div>
 
-              <div className="flex items-center gap-1 text-sm text-gray-400">
-                <Clock size={14} />
-                <span>{post.readingTime} min read</span>
-              </div>
+
 
               <div className="flex-1" />
 

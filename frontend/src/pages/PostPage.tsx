@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { createSanitizedHTML } from '../utils/sanitize';
 import {
@@ -21,7 +21,8 @@ import {
   Bookmark,
   Send,
   Trash2,
-  Eye,
+  Image as ImageIcon,
+  Loader2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { apiService, Post, CommentDto } from '../services/apiService';
@@ -55,6 +56,8 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState('');
   const [submittingComment, setSubmittingComment] = useState(false);
+  const [uploadingCommentImage, setUploadingCommentImage] = useState(false);
+  const commentImageInputRef = useRef<HTMLInputElement>(null);
 
   const fetchPost = useCallback(async () => {
     try {
@@ -169,6 +172,34 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
     } catch { toast.error('Failed to delete comment'); }
   };
 
+  const handleCommentImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) { toast.error('Only image files are allowed'); return; }
+    if (file.size > 10 * 1024 * 1024) { toast.error('Image must be less than 10MB'); return; }
+
+    try {
+      setUploadingCommentImage(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/v1/upload', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error('Upload failed');
+      const data = await response.json();
+      setNewComment(prev => prev + `\n<img src="${data.url}" alt="comment image" />\n`);
+    } catch { toast.error('Failed to upload image'); }
+    finally {
+      setUploadingCommentImage(false);
+      if (commentImageInputRef.current) commentImageInputRef.current.value = '';
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric', month: 'long', day: 'numeric',
@@ -237,10 +268,7 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
               <Calendar size={12} />
               <span>{formatDate(post.createdAt)}</span>
             </div>
-            <div className="flex items-center gap-1 text-xs text-white/70">
-              <Clock size={12} />
-              <span>{post.readingTime} min read</span>
-            </div>
+
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight text-balance mb-6 drop-shadow-sm">
             {post.title}
@@ -254,7 +282,7 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {isAuthenticated && (
+              {isAuthenticated && post.author?.id === user?.id && (
                 <>
                   <Button as={Link} to={`/posts/${post.id}/edit`} startContent={<Edit size={14} />} size="sm" className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm font-medium border border-white/10">
                     Edit
@@ -305,16 +333,7 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
             >
               {bookmarked ? 'Saved' : 'Save'}
             </Button>
-            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700" />
-            <Button
-              variant="light"
-              startContent={<Eye size={20} />}
-              onClick={handleShare}
-              className="font-semibold text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Share
-            </Button>
-          </div>
+            </div>
 
           <div className="mt-14 pt-10 border-t border-gray-100 dark:border-gray-800">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
@@ -340,6 +359,21 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
                     className="flex-1"
                     classNames={{ input: 'bg-transparent' }}
                   />
+                  <input
+                    type="file"
+                    ref={commentImageInputRef}
+                    onChange={handleCommentImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <Button
+                    isIconOnly
+                    onPress={() => commentImageInputRef.current?.click()}
+                    isLoading={uploadingCommentImage}
+                    className="bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-xl min-w-10 h-10"
+                  >
+                    {uploadingCommentImage ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
+                  </Button>
                   <Button
                     isIconOnly
                     onPress={handleSubmitComment}
@@ -384,7 +418,7 @@ const PostPage: React.FC<PostPageProps> = ({ isAuthenticated }) => {
                           )}
                         </div>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{comment.content}</p>
+                      <div className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={createSanitizedHTML(comment.content)} />
                     </div>
                   </div>
                 ))}
