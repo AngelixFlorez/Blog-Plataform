@@ -1,3 +1,5 @@
+[![Blog-Plataform Banner](frontend/public/bloggeoPortada.png)](frontend/public/bloggeoPortada.png)
+
 # Blog-Plataform
 
 **Full-stack blog platform with rich text editing, social interactions, and a modern UI**  
@@ -287,7 +289,7 @@ All API routes are prefixed with `/api/v1`.
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](https://opensource.org/licenses/MIT).
+Este proyecto es de código abierto y está disponible bajo la licencia [ISC License](https://opensource.org/licenses/ISC).
 
 ---
 
